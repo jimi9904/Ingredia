@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #FAF6F0;
+  color: #1E120A;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #F5EDE0; }
+::-webkit-scrollbar-thumb { background: #D96B4B; border-radius: 3px; }
+
+@layer components {
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 border-[1.5px] border-terra text-terra rounded-full text-sm font-semibold bg-transparent hover:bg-terra hover:text-white transition-all cursor-pointer;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-terra text-white rounded-full text-sm font-semibold hover:bg-terra-2 hover:-translate-y-0.5 hover:shadow-cta transition-all cursor-pointer;
+  }
+  .input-cream {
+    @apply w-full px-4 py-3 bg-white border-[1.5px] border-cream-3 rounded-lg text-sm text-deep outline-none focus:border-terra transition-colors;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide;
+  }
+  .badge-veg     { @apply badge bg-white ring-2 px-2.5 py-1 text-[12px] shadow-sm; color: #007A2E; --tw-ring-color: #00A83F; }
+  .badge-egg     { @apply badge bg-white ring-2 px-2.5 py-1 text-[12px] shadow-sm; color: #8B4A00; --tw-ring-color: #F59E0B; }
+  .badge-nonveg  { @apply badge bg-white ring-2 px-2.5 py-1 text-[12px] shadow-sm; color: #B0001D; --tw-ring-color: #E60023; }
+
+  /* The classic India FSSAI-style "filled square inside an outlined square" indicator,
+     built with pure CSS so it scales with text and stays crisp at any zoom level.
+     Inner mark is also a square (not a dot) to match the standard label spec. */
+  .diet-mark {
+    @apply inline-flex items-center justify-center flex-shrink-0;
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 2px;
+    background: #fff;
+  }
+  .diet-mark::after {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 1px;
+    display: block;
+  }
+  .diet-mark--veg     { border-color: #00A83F; }
+  .diet-mark--veg::after     { background: #00B14F; }
+  .diet-mark--egg     { border-color: #F59E0B; }
+  .diet-mark--egg::after     { background: #F59E0B; border-radius: 50%; }
+  .diet-mark--nonveg  { border-color: #E60023; }
+  .diet-mark--nonveg::after  { background: #FF1F3D; }
+  /* Dairy — vegetarian but worth flagging for vegans; blue square inside the outline. */
+  .diet-mark--dairy   { border-color: #2563EB; }
+  .diet-mark--dairy::after   { background: #3B82F6; }
+
+  /* Larger variant for the recipe modal header */
+  .diet-mark-lg { width: 20px; height: 20px; border-width: 2.5px; border-radius: 3px; }
+  .diet-mark-lg::after { width: 11px; height: 11px; border-radius: 1.5px; }
+  .diet-mark-lg.diet-mark--egg::after { border-radius: 50%; }
+  .badge-cuisine { @apply badge bg-deep/60 text-white/90 backdrop-blur-sm; }
+  .badge-diff-easy   { @apply badge bg-sage/15 text-sage uppercase tracking-wider; }
+  .badge-diff-medium { @apply badge bg-gold/15 text-gold uppercase tracking-wider; }
+  .badge-diff-hard   { @apply badge bg-terra/15 text-terra uppercase tracking-wider; }
+}
+
+@layer utilities {
+  .container-x { @apply max-w-[1200px] mx-auto px-6; }
+  .section-label { @apply text-xs font-semibold tracking-widest uppercase text-terra; }
+}
