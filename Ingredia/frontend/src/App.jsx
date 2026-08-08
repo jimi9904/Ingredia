@@ -47,18 +47,25 @@ function GuestOnly({ children }) {
   return children
 }
 
+function LandingRoute() {
+  const { isAuthenticated, loading } = useAuth()
+  if (loading) return null
+  if (isAuthenticated) return <Navigate to="/home" replace />
+  return <LandingPage />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <ToastProvider>
         <AuthProvider>
           <Routes>
-            <Route path="/"        element={<LandingPage />} />
+            <Route path="/"        element={<LandingRoute />} />
             <Route path="/login"            element={<GuestOnly><LoginPage /></GuestOnly>} />
             <Route path="/signup"           element={<GuestOnly><SignupPage /></GuestOnly>} />
             <Route path="/forgot-password"  element={<GuestOnly><ForgotPasswordPage /></GuestOnly>} />
             <Route path="/reset-password"   element={<ResetPasswordPage />} />
-            <Route path="/home"    element={<HomePage />} />
+            <Route path="/home"    element={<PrivateRoute><HomePage /></PrivateRoute>} />
             <Route path="/saved"   element={<UserOnlyRoute><SavedPage /></UserOnlyRoute>} />
             <Route path="/pantry"  element={<UserOnlyRoute><PantryPage /></UserOnlyRoute>} />
             <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />

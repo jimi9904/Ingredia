@@ -278,12 +278,97 @@ export default function HomePage() {
     <div className="min-h-screen bg-cream">
       <Navbar variant="home" />
 
+      {/* ===== HERO (FOODEAT-style) ===== */}
+      <section
+        id="hero"
+        className="relative grid md:grid-cols-[1.05fr_1fr] items-center gap-10 lg:gap-16 px-6 md:px-16 lg:px-24 pt-10 pb-16 overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #F7E8D5 0%, #EFD8B6 55%, #E8C99A 100%)' }}
+      >
+        {/* Subtle warm glow blobs */}
+        <div className="absolute top-[-200px] right-[-160px] w-[640px] h-[640px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(192,75,46,0.10) 0%, transparent 65%)' }} />
+        <div className="absolute bottom-[-180px] left-[-80px] w-[520px] h-[520px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(107,124,94,0.08) 0%, transparent 65%)' }} />
+
+        {/* ── Left column: editorial copy ── */}
+        <div className="relative z-10 animate-fade-up">
+          <h1
+            className="font-hero leading-[1.02] text-deep tracking-tight"
+            style={{ fontSize: 'clamp(44px, 5.5vw, 76px)' }}
+          >
+            {t('landing.heroTitleA', 'Delicious Food')}<br />
+            {t('landing.heroTitleB', 'Is Waiting')}<br />
+            {t('landing.heroTitleC', 'For You')}
+          </h1>
+
+          <p className="text-[15px] font-light leading-[1.75] text-deep-2 max-w-[420px] mt-6 mb-8">
+            {t('landing.heroSub')}
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="#kitchen"
+              className="inline-flex items-center px-7 py-3.5 bg-terra text-white font-bold rounded-full text-[15px] shadow-cta hover:bg-terra-2 hover:-translate-y-0.5 transition-all"
+            >
+              🍳 {t('nav.myKitchen', 'My Kitchen')}
+            </a>
+            <a
+              href="#trending"
+              className="inline-flex items-center px-7 py-3.5 bg-deep/10 text-deep font-semibold rounded-full text-[15px] hover:bg-deep/15 transition-colors"
+            >
+              {t('landing.heroCtaSecondary', 'Top Dishes')}
+            </a>
+          </div>
+        </div>
+
+        {/* ── Right column: clean circular hero plate ── */}
+        <div className="relative z-10 hidden md:block">
+          <div className="relative w-full max-w-[480px] aspect-square mx-auto">
+            {/* Soft halo behind the plate */}
+            <div className="absolute inset-[-24px] rounded-full bg-white/40 backdrop-blur-sm" />
+            {/* Plate */}
+            <div className="relative w-full h-full rounded-full overflow-hidden shadow-[0_24px_60px_rgba(60,30,12,0.25)] ring-[10px] ring-white/60">
+              <img
+                src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=900&q=80&auto=format"
+                alt="Fresh, colourful bowl"
+                className="w-full h-full object-cover animate-float-food"
+                onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'flex' }}
+              />
+              <div
+                className="w-full h-full items-center justify-center text-[140px]"
+                style={{ display: 'none', background: 'linear-gradient(135deg, #C25A00 0%, #F4A228 100%)' }}
+              >
+                🍲
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services strip */}
+      <section className="bg-cream border-y border-deep/5 px-6 md:px-12">
+        <div className="container-x flex flex-wrap items-center justify-around gap-x-8 gap-y-3 py-5 text-[13px] text-deep">
+          {[
+            { icon: '🔍', key: 'landing.svcSearch' },
+            { icon: '🧺', key: 'landing.svcPantry' },
+            { icon: '⭐', key: 'landing.svcReviews' },
+            { icon: '🔖', key: 'landing.svcSaved' },
+            { icon: '🌍', key: 'landing.svcCuisines' },
+          ].map((s) => (
+            <div key={s.key} className="flex items-center gap-2">
+              <span className="text-lg leading-none">{s.icon}</span>
+              <span className="font-medium">{t(s.key)}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Ingredient search bar */}
-      <IngredientPicker
-        ingredients={ingredients}
-        onChange={setIngredients}
-        onSearch={handleSearch}
-      />
+      <div id="kitchen">
+        <IngredientPicker
+          ingredients={ingredients}
+          onChange={setIngredients}
+          onSearch={handleSearch}
+        />
+      </div>
 
       {/* Recommendations carousel (auth users, no active search) */}
       {!searchActive && recommendQuery.data?.length > 0 && (

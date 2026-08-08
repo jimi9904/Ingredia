@@ -74,10 +74,12 @@ export default function LandingPage() {
   const openSignup = () => setAuthModal('signup')
   const closeModal = () => setAuthModal(null)
 
-  // CTAs are plain Links to /home now — content is public for everyone.
-  // This stays as a stable no-op handler so the JSX onClick={handleCta} props
-  // continue to work without behaviour changes.
-  const handleCta = () => {}
+  const handleCta = (e) => {
+    if (!isAuthenticated) {
+      e?.preventDefault()
+      openLogin()
+    }
+  }
 
   return (
     <div className="bg-cream text-deep overflow-x-hidden">
@@ -251,6 +253,7 @@ export default function LandingPage() {
             </p>
             <Link
               to="/home"
+              onClick={handleCta}
               className="inline-flex items-center gap-2 font-bold text-terra border-b-2 border-terra/40 hover:border-terra pb-1 transition-colors"
             >
               {t('landing.featuredCta', 'Try the pantry search')} →
@@ -309,6 +312,7 @@ export default function LandingPage() {
               <Link
                 key={c.name}
                 to={`/home?cuisine=${c.name.toLowerCase()}`}
+                onClick={handleCta}
                 className="group block bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-terra/40 hover:-translate-y-1.5 hover:shadow-[0_8px_32px_rgba(192,75,46,0.25)] transition-all duration-300"
               >
                 {/* Image area */}

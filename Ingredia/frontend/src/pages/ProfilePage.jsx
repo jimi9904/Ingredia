@@ -65,7 +65,7 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     await logout()
-    navigate('/')
+    window.location.href = '/'
   }
 
   const TABS = [

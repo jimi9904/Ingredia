@@ -46,16 +46,15 @@ export default function Navbar({ variant = 'landing', onLogin, onSignup }) {
   }, [variant])
 
   const handleLogout = async () => {
-    navigate('/')
     await logout()
-    toast('Signed out.')
+    window.location.href = '/'
   }
 
   const navClass = variant === 'landing'
     ? `fixed top-0 left-0 right-0 z-50 flex justify-between items-center bg-cream/85 backdrop-blur-md border-b border-terra/10 transition-all duration-300 ${
         scrolled ? 'py-3.5 px-12 shadow-card' : 'py-5 px-12'
       }`
-    : 'sticky top-0 z-50 bg-white border-b border-cream-3'
+    : 'sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-terra/10'
 
   return (
     <nav className={navClass}>
