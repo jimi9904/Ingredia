@@ -54,3 +54,4 @@ export function getFoodGradient(title = '', cuisine = '') {
   if (c.includes('italian')) return 'linear-gradient(135deg, #A62B1F 0%, #D4634A 100%)'
   return 'linear-gradient(135deg, #C27A50 0%, #E8B88A 100%)'
 }
+
