@@ -19,3 +19,4 @@ services:
         value: 30d
       - key: FRONTEND_URL
         sync: false
+

@@ -8,7 +8,8 @@
     "dev": "tsx watch src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
-    "import:csv": "tsx src/scripts/importCsv.ts"
+    "import:csv": "tsx src/scripts/importCsv.ts",
+    "migrate:atlas": "tsx src/scripts/migrateToAtlas.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
