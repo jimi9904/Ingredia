@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const LOCAL_URI = process.env.LOCAL_MONGODB_URI || 'mongodb://127.0.0.1:27017/recipe_platform';
-const ATLAS_URI = process.env.ATLAS_URI || process.env.MONGODB_URI;
+const LOCAL_URI: string = process.env.LOCAL_MONGODB_URI || 'mongodb://127.0.0.1:27017/recipe_platform';
+const ATLAS_URI: string = process.env.ATLAS_URI || process.env.MONGODB_URI || '';
 
 if (!ATLAS_URI) {
   console.error('Please define ATLAS_URI or MONGODB_URI in your environment or .env file.');
@@ -33,6 +33,10 @@ async function migrate() {
 
   const localDb = localConn.db;
   const atlasDb = atlasConn.db;
+
+  if (!localDb || !atlasDb) {
+    throw new Error('Database instance is undefined on one of the connections.');
+  }
 
   for (const collName of COLLECTIONS_TO_MIGRATE) {
     console.log(`\n Migrating collection: ${collName}...`);
