@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { parseIngredient } from '../utils/parseIngredient'
 import { classifyDiet } from '../utils/dietType'
 import { useTranslatedText, useTranslatedList } from '../hooks/useTranslatedText'
+import { getFoodEmoji, getFoodGradient } from '../utils/foodVisuals'
 
 // Per-diet visual theme for the top band, accent text, and nutrition pills.
 const DIET_THEME = {
@@ -243,10 +244,12 @@ export default function RecipeModal({ recipe: initialRecipe, onClose, onRecipeCh
               />
             ) : (
               <div
-                className="w-full h-full flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #C27A50 0%, #E8B88A 100%)', fontSize: 80 }}
+                className="w-full h-full flex items-center justify-center text-6xl"
+                style={{ background: getFoodGradient(recipe.title, recipe.cuisine) }}
               >
-                <span>🍽</span>
+                <span style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))' }}>
+                  {getFoodEmoji(recipe.title, recipe.cuisine)}
+                </span>
               </div>
             )}
           </div>
@@ -557,6 +560,8 @@ function SimilarRow({ recipe, theme, onClick }) {
     setImgFailed(false)
   }, [recipe.image])
 
+  const cookTimeDisplay = recipe.cookTime || (recipe.cook_time ? `${recipe.cook_time} min` : '—')
+
   return (
     <li>
       <button
@@ -575,8 +580,13 @@ function SimilarRow({ recipe, theme, onClick }) {
               onError={() => setImgFailed(true)}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-2xl bg-cream-2">
-              🍽
+            <div
+              className="w-full h-full flex items-center justify-center text-2xl"
+              style={{ background: getFoodGradient(recipe.title, recipe.cuisine) }}
+            >
+              <span style={{ filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.2))' }}>
+                {getFoodEmoji(recipe.title, recipe.cuisine)}
+              </span>
             </div>
           )}
           <span
@@ -597,12 +607,12 @@ function SimilarRow({ recipe, theme, onClick }) {
                 <span>·</span>
               </>
             )}
-            <span>{recipe.cookTime}</span>
+            <span>{cookTimeDisplay}</span>
           </div>
         </div>
         <span
           className="self-center text-base opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{ color: theme.accent }}
+          style={{ color: theme?.accent || '#365E1F' }}
         >→</span>
       </button>
     </li>

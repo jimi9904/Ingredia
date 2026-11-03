@@ -1,63 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTranslatedText } from '../hooks/useTranslatedText'
-
-function getFoodEmoji(title = '', cuisine = '') {
-  const t = title.toLowerCase()
-  const c = cuisine.toLowerCase()
-  if (t.includes('biryani'))                              return '🍚'
-  if (t.includes('rice') || t.includes('pilaf') || t.includes('risotto')) return '🍚'
-  if (t.includes('pizza'))                               return '🍕'
-  if (t.includes('pasta') || t.includes('spaghetti') || t.includes('penne') || t.includes('linguine') || t.includes('fettuccine')) return '🍝'
-  if (t.includes('noodle') || t.includes('ramen') || t.includes('pho') || t.includes('udon')) return '🍜'
-  if (t.includes('burger') || t.includes('sandwich') || t.includes('wrap')) return '🍔'
-  if (t.includes('taco') || t.includes('burrito') || t.includes('quesadilla')) return '🌮'
-  if (t.includes('soup') || t.includes('broth') || t.includes('bisque') || t.includes('chowder')) return '🍲'
-  if (t.includes('stew') || t.includes('casserole') || t.includes('hotpot')) return '🥘'
-  if (t.includes('salad'))                               return '🥗'
-  if (t.includes('sushi') || t.includes('maki') || t.includes('nigiri')) return '🍣'
-  if (t.includes('dumpling') || t.includes('dim sum') || t.includes('gyoza')) return '🥟'
-  if (t.includes('cake') || t.includes('cupcake') || t.includes('muffin')) return '🍰'
-  if (t.includes('cookie') || t.includes('biscuit'))    return '🍪'
-  if (t.includes('brownie') || t.includes('chocolate')) return '🍫'
-  if (t.includes('ice cream') || t.includes('gelato') || t.includes('sorbet')) return '🍦'
-  if (t.includes('pancake') || t.includes('waffle') || t.includes('crepe')) return '🥞'
-  if (t.includes('pie') || t.includes('tart') || t.includes('crumble')) return '🥧'
-  if (t.includes('bread') || t.includes('naan') || t.includes('roti') || t.includes('pita')) return '🫓'
-  if (t.includes('egg') || t.includes('omelette') || t.includes('frittata')) return '🍳'
-  if (t.includes('bacon') || t.includes('ham') || t.includes('pork')) return '🥓'
-  if (t.includes('steak') || t.includes('beef') || t.includes('lamb')) return '🥩'
-  if (t.includes('chicken') || t.includes('turkey') || t.includes('duck')) return '🍗'
-  if (t.includes('salmon') || t.includes('fish') || t.includes('tuna') || t.includes('cod') || t.includes('prawn') || t.includes('shrimp')) return '🐟'
-  if (t.includes('curry') || t.includes('masala') || t.includes('tikka') || t.includes('dal') || t.includes('paneer') || t.includes('samosa')) return '🍛'
-  if (t.includes('mushroom'))                            return '🍄'
-  if (t.includes('potato') || t.includes('fries') || t.includes('chips')) return '🥔'
-  if (t.includes('smoothie') || t.includes('juice'))    return '🥤'
-  if (c.includes('japanese') || c.includes('korean'))   return '🍱'
-  if (c.includes('mexican'))                            return '🌮'
-  if (c.includes('italian'))                            return '🍝'
-  if (c.includes('chinese') || c.includes('thai') || c.includes('vietnamese')) return '🥢'
-  if (c.includes('indian'))                             return '🍛'
-  return '🍽'
-}
-
-function getFoodGradient(title = '', cuisine = '') {
-  const t = title.toLowerCase()
-  const c = cuisine.toLowerCase()
-  if (t.includes('chocolate') || t.includes('brownie') || t.includes('coffee')) return 'linear-gradient(135deg, #6B3A2A 0%, #A0522D 100%)'
-  if (t.includes('salad') || t.includes('vegetable') || t.includes('avocado') || t.includes('spinach')) return 'linear-gradient(135deg, #3A6B47 0%, #70A87A 100%)'
-  if (t.includes('salmon') || t.includes('fish') || t.includes('seafood') || t.includes('prawn') || t.includes('shrimp')) return 'linear-gradient(135deg, #1A5B8A 0%, #4DA8DA 100%)'
-  if (t.includes('pasta') || t.includes('pizza') || t.includes('tomato')) return 'linear-gradient(135deg, #A62B1F 0%, #D4634A 100%)'
-  if (t.includes('rice') || t.includes('biryani') || t.includes('pilaf')) return 'linear-gradient(135deg, #B8860B 0%, #DAA520 100%)'
-  if (t.includes('cake') || t.includes('dessert') || t.includes('sweet') || t.includes('cookie') || t.includes('pie')) return 'linear-gradient(135deg, #7B3F6E 0%, #C47AB5 100%)'
-  if (t.includes('soup') || t.includes('stew') || t.includes('broth')) return 'linear-gradient(135deg, #8B4513 0%, #CD853F 100%)'
-  if (t.includes('curry') || t.includes('masala') || t.includes('tikka') || t.includes('dal') || c.includes('indian')) return 'linear-gradient(135deg, #C25A00 0%, #F4A228 100%)'
-  if (c.includes('japanese') || c.includes('korean')) return 'linear-gradient(135deg, #8B1A1A 0%, #D44A3A 100%)'
-  if (c.includes('thai') || c.includes('chinese')) return 'linear-gradient(135deg, #7A1E1E 0%, #C43A1F 100%)'
-  if (c.includes('mexican')) return 'linear-gradient(135deg, #7A3B00 0%, #C0722A 100%)'
-  if (c.includes('italian')) return 'linear-gradient(135deg, #A62B1F 0%, #D4634A 100%)'
-  return 'linear-gradient(135deg, #C27A50 0%, #E8B88A 100%)'
-}
+import { getFoodEmoji, getFoodGradient } from '../utils/foodVisuals'
 
 // ── Per-diet color theme. Card outer band tints by veg / egg / nonveg. ──
 const DIET_THEME = {
