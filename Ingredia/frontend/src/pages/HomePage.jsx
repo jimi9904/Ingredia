@@ -557,7 +557,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <RecipeModal recipe={selectedRecipe} onClose={() => setSelectedRecipe(null)} />
+      <RecipeModal
+        recipe={selectedRecipe}
+        onClose={() => setSelectedRecipe(null)}
+        onRecipeChange={setSelectedRecipe}
+      />
     </div>
   )
 }

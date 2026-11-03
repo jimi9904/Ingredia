@@ -66,13 +66,13 @@ export const fetchPopularRecipes = async (limit = 6) => {
 }
 
 export const fetchRecipeBySlug = async (slug) => {
-  const { data } = await api.get(`/recipes/${slug}`)
+  const { data } = await api.get(`/recipes/${encodeURIComponent(slug)}`)
   return data.data ? formatRecipe(data.data) : null
 }
 
 export const fetchSimilarRecipes = async (slug) => {
   if (!slug) return []
-  const { data } = await api.get(`/recipes/${slug}/similar`)
+  const { data } = await api.get(`/recipes/${encodeURIComponent(slug)}/similar`)
   return (data.data || []).map(formatRecipe)
 }
 

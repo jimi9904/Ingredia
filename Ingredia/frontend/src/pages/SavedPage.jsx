@@ -185,7 +185,11 @@ export default function SavedPage() {
         </div>
       </div>
 
-      <RecipeModal recipe={selectedRecipe} onClose={() => setSelectedRecipe(null)} />
+      <RecipeModal
+        recipe={selectedRecipe}
+        onClose={() => setSelectedRecipe(null)}
+        onRecipeChange={setSelectedRecipe}
+      />
     </div>
   )
 }

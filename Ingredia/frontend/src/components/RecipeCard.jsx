@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTranslatedText } from '../hooks/useTranslatedText'
 
@@ -100,6 +101,12 @@ function diffClass(d) {
 
 export default function RecipeCard({ recipe, onClick, isFavorite, onToggleFavorite }) {
   const { t } = useTranslation()
+  const [imgError, setImgError] = useState(false)
+
+  useEffect(() => {
+    setImgError(false)
+  }, [recipe.image])
+
   const diet = recipe.type === 'veg' || recipe.type === 'egg' || recipe.type === 'nonveg' ? recipe.type : 'veg'
   const theme = DIET_THEME[diet]
   const description = recipe.description ||
@@ -130,23 +137,25 @@ export default function RecipeCard({ recipe, onClick, isFavorite, onToggleFavori
     >
       {/* ── Full-bleed cover image ── */}
       <div className="relative w-full h-[200px] overflow-hidden bg-cream-3">
-        {recipe.image ? (
+        {recipe.image && !imgError ? (
           <img
             src={recipe.image}
             alt={recipe.title}
             loading="lazy"
+            referrerPolicy="no-referrer"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'flex' }}
+            onError={() => setImgError(true)}
           />
-        ) : null}
-        <div
-          className="w-full h-full items-center justify-center text-6xl"
-          style={{ display: recipe.image ? 'none' : 'flex', background: getFoodGradient(recipe.title, recipe.cuisine) }}
-        >
-          <span style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))' }}>
-            {getFoodEmoji(recipe.title, recipe.cuisine)}
-          </span>
-        </div>
+        ) : (
+          <div
+            className="w-full h-full flex items-center justify-center text-6xl"
+            style={{ background: getFoodGradient(recipe.title, recipe.cuisine) }}
+          >
+            <span style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))' }}>
+              {getFoodEmoji(recipe.title, recipe.cuisine)}
+            </span>
+          </div>
+        )}
 
         {/* Subtle bottom gradient so the badges stay readable on bright food photos */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/10 via-transparent to-transparent" />

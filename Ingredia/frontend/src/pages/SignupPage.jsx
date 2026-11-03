@@ -52,13 +52,13 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-10 shadow-soft text-left space-y-4">
           <Field label={t('auth.fullName')} error={fieldErrors.name?.[0]}>
-            <input type="text" required className="input-cream" placeholder={t('auth.namePlaceholder')} value={name} onChange={(e) => setName(e.target.value)} autoFocus />
+            <input type="text" required autoComplete="name" className="input-cream" placeholder={t('auth.namePlaceholder')} value={name} onChange={(e) => setName(e.target.value)} autoFocus />
           </Field>
           <Field label={t('auth.email')} error={fieldErrors.email?.[0]}>
-            <input type="email" required className="input-cream" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" required autoComplete="email" className="input-cream" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} />
           </Field>
           <Field label={t('auth.password')} error={fieldErrors.password?.[0]}>
-            <input type="password" required minLength={8} className="input-cream" placeholder={t('auth.createPasswordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" required minLength={8} autoComplete="new-password" className="input-cream" placeholder={t('auth.createPasswordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} />
           </Field>
           {error && <div className="text-sm text-terra">{error}</div>}
           <button type="submit" disabled={submitting} className="w-full py-4 bg-terra text-white rounded-lg text-[15px] font-semibold hover:bg-terra-2 transition-colors disabled:opacity-60">

@@ -42,10 +42,10 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-10 shadow-soft text-left space-y-4">
           <Field label={t('auth.email')}>
-            <input type="email" required className="input-cream" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} autoFocus />
+            <input type="email" required autoComplete="email" className="input-cream" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} autoFocus />
           </Field>
           <Field label={t('auth.password')}>
-            <input type="password" required className="input-cream" placeholder={t('auth.passwordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" required autoComplete="current-password" className="input-cream" placeholder={t('auth.passwordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} />
           </Field>
           {error && <div className="text-sm text-terra">{error}</div>}
           <button type="submit" disabled={submitting} className="w-full py-4 bg-terra text-white rounded-lg text-[15px] font-semibold hover:bg-terra-2 transition-colors disabled:opacity-60">

@@ -47,7 +47,7 @@ function renderStars(n) {
   ))
 }
 
-export default function RecipeModal({ recipe: initialRecipe, onClose }) {
+export default function RecipeModal({ recipe: initialRecipe, onClose, onRecipeChange }) {
   const { t } = useTranslation()
   const { user, isAuthenticated } = useAuth()
   const toast = useToast()
@@ -68,11 +68,16 @@ export default function RecipeModal({ recipe: initialRecipe, onClose }) {
   const [photo, setPhoto] = useState(null)
   const [isSaved, setIsSaved] = useState(false)
   const [swapping, setSwapping] = useState(false)
+  const [heroImgError, setHeroImgError] = useState(false)
   const scrollRef = useRef(null)
 
   useEffect(() => {
     setRecipe(initialRecipe)
   }, [initialRecipe])
+
+  useEffect(() => {
+    setHeroImgError(false)
+  }, [recipe?.image])
 
   useEffect(() => {
     if (!recipe) return
@@ -103,8 +108,23 @@ export default function RecipeModal({ recipe: initialRecipe, onClose }) {
         // Apply diet classification so the theme + badge update correctly.
         const enriched = { ...full, type: classifyDiet(full) }
         setRecipe(enriched)
-        scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+        onRecipeChange?.(enriched)
+        setTab('details')
+        if (scrollRef.current) {
+          try {
+            if (typeof scrollRef.current.scrollTo === 'function') {
+              scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+            } else {
+              scrollRef.current.scrollTop = 0
+            }
+          } catch {
+            scrollRef.current.scrollTop = 0
+          }
+        }
       }
+    } catch (err) {
+      console.error('Failed to swap recipe:', err)
+      toast('Could not load recipe details.')
     } finally {
       setSwapping(false)
     }
@@ -184,12 +204,12 @@ export default function RecipeModal({ recipe: initialRecipe, onClose }) {
 
   return (
     <div
+      ref={scrollRef}
       onClick={onClose}
       className="fixed inset-0 z-[999] flex items-start justify-center p-4 sm:p-6 bg-deep/70 backdrop-blur-sm overflow-y-auto"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        ref={scrollRef}
         className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-4 max-w-[1080px] w-full my-4 relative"
         style={{ opacity: swapping ? 0.7 : 1, transition: 'opacity 0.15s' }}
       >
@@ -210,23 +230,25 @@ export default function RecipeModal({ recipe: initialRecipe, onClose }) {
         {/* ── Top colored band with circular hero image ── */}
         <div className="relative pt-9 pb-16 flex justify-center">
           <div
-            className="relative w-[180px] h-[180px] rounded-full overflow-hidden bg-white shadow-2xl"
+            className="relative w-[180px] h-[180px] rounded-full overflow-hidden bg-white shadow-2xl flex items-center justify-center"
             style={{ boxShadow: '0 12px 32px rgba(0,0,0,0.22)', outline: `8px solid ${theme.ring}`, outlineOffset: '-4px' }}
           >
-            {recipe.image ? (
+            {recipe.image && !heroImgError ? (
               <img
                 src={recipe.image}
                 alt={recipe.title}
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling.style.display = 'flex' }}
+                onError={() => setHeroImgError(true)}
               />
-            ) : null}
-            <div
-              className="w-full h-full items-center justify-center"
-              style={{ display: recipe.image ? 'none' : 'flex', background: 'linear-gradient(135deg, #C27A50 0%, #E8B88A 100%)', fontSize: 80 }}
-            >
-              <span>🍽</span>
-            </div>
+            ) : (
+              <div
+                className="w-full h-full flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #C27A50 0%, #E8B88A 100%)', fontSize: 80 }}
+              >
+                <span>🍽</span>
+              </div>
+            )}
           </div>
 
           {/* Save button — overlaps the band/body seam like the "Add to cart" in the reference */}
@@ -526,29 +548,39 @@ export default function RecipeModal({ recipe: initialRecipe, onClose }) {
 }
 
 function SimilarRow({ recipe, theme, onClick }) {
+  const [imgFailed, setImgFailed] = useState(false)
   const diet = classifyDiet(recipe)
   const dietColor = { veg: '#00A83F', egg: '#F59E0B', nonveg: '#E60023' }[diet]
   const titleT = useTranslatedText(recipe.title)
+
+  useEffect(() => {
+    setImgFailed(false)
+  }, [recipe.image])
+
   return (
     <li>
       <button
+        type="button"
         onClick={onClick}
-        className="w-full flex gap-3 items-stretch text-left rounded-2xl p-2 transition-all hover:bg-cream-2 group"
+        className="w-full flex gap-3 items-stretch text-left rounded-2xl p-2 transition-all hover:bg-cream-2 group cursor-pointer"
       >
-        <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-cream-3 relative">
-          {recipe.image ? (
+        <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-cream-3 relative flex items-center justify-center">
+          {recipe.image && !imgFailed ? (
             <img
               src={recipe.image}
               alt={recipe.title}
               loading="lazy"
+              referrerPolicy="no-referrer"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={(e) => { e.currentTarget.style.display = 'none' }}
+              onError={() => setImgFailed(true)}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-2xl">🍽</div>
+            <div className="w-full h-full flex items-center justify-center text-2xl bg-cream-2">
+              🍽
+            </div>
           )}
           <span
-            className="absolute bottom-1 left-1 w-3 h-3 rounded-sm border-2 bg-white"
+            className="absolute bottom-1 left-1 w-3 h-3 rounded-sm border-2 bg-white shadow-sm pointer-events-none"
             style={{ borderColor: dietColor }}
             aria-label={diet}
           />
