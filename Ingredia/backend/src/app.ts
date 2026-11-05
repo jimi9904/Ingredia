@@ -46,8 +46,9 @@ app.get('/up', (_req, res) => {
   res.status(200).send('OK');
 });
 
-// API Routes
+// API Routes (mounted at /api and root / for resilience against missing /api prefix in client configs)
 app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 // Global Error Handler
 app.use(errorHandler);
